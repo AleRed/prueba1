@@ -4,22 +4,50 @@
 
 $(document).ready(function () {
 
-  var addGraphicToInterface = function(graphic_title){
-    $("#graphics-titles-container ul").append(
-      "<li><a href='#" + graphic_title.replace(' ', '_') + "'>" + graphic_title + "</a></li>"
-    );
+  var bar_chart_data = [
+    {period: "1", value: 20},
+    {period: "2", value: 50},
+    {period: "3", value: 35},
+    {period: "4", value: 45},
+    {period: "5", value: 21},
+    {period: "6", value: 1},
+    {period: "7", value: 12},
+    {period: "8", value: 15}
+  ];
 
+
+  var addGraphicToInterface = function(graphic_title){
+    var container_id = graphic_title.replace(' ', '_');
+
+    $("#graphics-titles-container ul").append(
+      "<li id='" + container_id + "_li'><a href='#" + container_id + "'>" + graphic_title + "</a></li>"
+    );
     $("#graphics-container").append(
-      "<div id='" + graphic_title.replace(' ', '_') + "'>" +
+      "<div id='" + container_id + "'>" +
       "<h2>" + graphic_title + "</h2>" +
-      "<div class='graphic-container'></div>" +
+      "<div id='" + container_id + "_graphic' class='graphic-container'></div>" +
       "</div>" +
       "<hr>"
     );
+
+    var graphic_width = document.getElementById(container_id).offsetWidth;
+    var graphic_height = document.getElementById(container_id).offsetHeight;
+    var graphic_margin = {top: 50, right: 30, bottom: 60, left: 100};
+
+    createBarChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    loadBarChartGraphic(bar_chart_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+
+
+    // Scroll al elemento creado
+    $('html, body').animate({
+      scrollTop: $("#" + container_id).offset().top
+    }, 500);
+
+
   };
 
   /*********************************************************************************************************************
-   * ADD GRAPH
+   * ADD GRAPH BUTTON
    ********************************************************************************************************************/
   $("#add-graphic-button").on("click", function(){
     var new_section = 'Section X';
@@ -30,11 +58,11 @@ $(document).ready(function () {
    * FUNCIONALIDAD DE SCROLL
    ********************************************************************************************************************/
 
-  var sections = ['Section A', 'Section B', 'Section C'];
-
-  sections.forEach(function(section){
-    addGraphicToInterface(section);
-  });
+  //var sections = ['Section A', 'Section B', 'Section C'];
+  //
+  //sections.forEach(function(section){
+  //  addGraphicToInterface(section);
+  //});
 
   $('body').scrollspy({ target: '#graphics-titles-container' });
 

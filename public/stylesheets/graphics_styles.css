@@ -1,0 +1,278 @@
+/* Place all the styles related to the Movie controller here.
+ They will automatically be included in application.css.
+ You can use Sass (SCSS) here: http://sass-lang.com/
+*/
+
+/*@font-face {*/
+    /*font-family: "Britanic";*/
+    /*src: url(/assets/Britanic.ttf);*/
+/*}*/
+
+
+/*html, body{*/
+    /*height: 100%;*/
+/*}*/
+/*head{*/
+    /*background-color: #003366;*/
+/*}*/
+
+
+/*#header-container{*/
+    /*width: 100%;*/
+    /*height: 12%;*/
+    /*padding-top: 10px;*/
+    /*background-color: #003366;*/
+    /*border-width: 2px;*/
+    /*border-style: solid;*/
+    /*border-color: #aeaeae;*/
+/*}*/
+
+/*#title-head{*/
+    /*font-size: 80px;*/
+    /*font-family: Britanic;*/
+    /*font-weight: 400;*/
+    /*color: #ff6666;*/
+    /*margin-left: 30px;*/
+/*}*/
+
+
+/*body{*/
+    /*font-family: Verdana, sans-serif;*/
+    /*margin: 0px;*/
+/*}*/
+
+/*#filter-menu-container{*/
+    /*display: inline-block;*/
+    /*width: 30%;*/
+    /*height: 85%;*/
+    /*background-color: #003366;*/
+    /*padding-top: 1%;*/
+    /*!*border-width: 2px;*!*/
+    /*!*border-style: solid;*!*/
+    /*!*border-color: #aeaeae*!*/
+/*}*/
+
+/*#filter-menu-title{*/
+    /*margin: 20px;*/
+    /*font-size: 50px;*/
+    /*font-family: Britanic;*/
+    /*color: #ff6666;*/
+/*}*/
+
+/*#filter-period-table{*/
+    /*margin-left: 50px;*/
+    /*margin-top: 20px;*/
+    /*margin-bottom: 20px;*/
+/*}*/
+
+/*#filter-type-title, #filter-year-select-title, #filter-genre-title, #filter-users-title, #filter-n-items-select-title{*/
+    /*font-size: 20px;*/
+    /*color: #DDDDDD;*/
+/*}*/
+
+/*#filter-genre-table td{*/
+    /*padding: 5px;*/
+/*}*/
+
+/*.filter-table{*/
+    /*margin-left: 20px;*/
+    /*margin-right: 20px;*/
+    /*margin-top: 10px;*/
+    /*margin-bottom: 10px;*/
+/*}*/
+
+/*.filter-table td, #filter-users-table input{*/
+    /*font-size: 14px;*/
+/*}*/
+
+/*#filter-users-table input{*/
+    /*margin-left: 50px;*/
+    /*width: 200px;*/
+/*}*/
+
+/*.filter-table input, select{*/
+    /*font-size: 25px;*/
+/*}*/
+
+/*#update-graphic-button{*/
+    /*float: right;*/
+    /*margin-right: 10px;*/
+    /*padding: 5px;*/
+    /*font-size: 16px;*/
+/*}*/
+
+/*#graphic-title{*/
+    /*margin-top: 40px;*/
+    /*margin-left: 40px;*/
+    /*text-decoration: underline;*/
+    /*font-size: 24px;*/
+    /*color: #003366;*/
+    /*font-family: Verdana, sans-serif;*/
+/*}*/
+
+#graphic-container{
+    float: right;
+    display: inline-block;
+    width: 70%;
+    height: 87%;
+    background-color: #ffffcc;
+    /*border-width: 2px;*/
+    /*border-style: solid;*/
+    /*border-radius: 10px;*/
+    /*border-color: gray;*/
+    pading:1%;
+}
+
+#chart-container{
+    margin: 1%;
+    width: 98%;
+    height: 98%;
+}
+
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: geometricPrecision;
+}
+
+.x_axis{
+    font-size: 12px;
+}
+.y_axis{
+    font-size: 12px;
+}
+
+.bar_chart_rect {
+    fill: steelblue;
+    shape-rendering: crispEdges;
+}
+
+
+.tooltip {
+    position: absolute;
+    text-align: left;
+    width: 120px;
+    height: 50px;
+    padding: 2px;
+    font: 16px sans-serif;
+    background: ghostwhite;
+    border: 1px;
+    border-color: gray;
+    border-radius: 1px;
+    pointer-events: none;
+}
+
+.line_chart_tooltip {
+    position: absolute;
+    text-align: left;
+    width: 200px;
+    height: 20px;
+    padding: 2px;
+    font: 16px sans-serif;
+    background: ghostwhite;
+    border: 1px;
+    border-color: gray;
+    border-radius: 1px;
+    pointer-events: none;
+}
+
+/*TREEMAP*/
+
+  .grandparent rect {
+      fill: orange;
+  }
+
+.grandparent:hover rect {
+    fill: #ee9700;
+}
+
+.children rect.parent,
+.grandparent rect {
+    cursor: pointer;
+}
+
+rect.parent{
+    stroke: black;
+    stroke-width: 1px;
+}
+
+rect.child{
+    stroke: dimgray;
+    stroke-width: .5px;
+}
+
+.treemap-text{
+    font-size: 16px;
+}
+.treemap-title-text{
+    font-size: 20px;
+}
+
+
+/*HIERARCHICAL_BUNDLING*/
+
+  .node {
+      font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+      fill: #000010;
+  }
+
+.node:hover {
+    fill: #000;
+}
+
+.link {
+    stroke: steelblue;
+    stroke-width: 1px;
+    stroke-opacity: .8;
+    fill: none;
+    pointer-events: none;
+}
+
+.node:hover,
+.node--source,
+.node--target {
+    font-weight: 700;
+}
+
+.node--source {
+    fill: #2ca02c;
+}
+
+.node--target {
+    fill: #d62728;
+}
+
+.link--source,
+.link--target {
+    stroke-opacity: 1;
+    stroke-width: 2px;
+}
+
+.link--source {
+    stroke: #d62728;
+}
+
+.link--target {
+    stroke: #2ca02c;
+}
+
+
+/*LINE CHART*/
+/*.axis path,*/
+/*.axis line {*/
+  /*fill: none;*/
+  /*stroke: #000;*/
+  /*shape-rendering: crispEdges;*/
+/*}*/
+
+/*.x.axis path {*/
+  /*display: none;*/
+/*}*/
+
+.line {
+    fill: none;
+}
+
+.line_chart_legend_text{
+    font-size: 12px;
+}
