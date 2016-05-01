@@ -21,24 +21,24 @@ $(document).ready(function () {
       $("#filter-value-select").fadeIn(100);
       if(value == "department"){
         var new_options = [
-          {value: "food", text: "Food"},
-          {value: "clothes", text: "Clothes"},
-          {value: "home", text: "Home"}
+          {value: "food", text: "Alimentación"},
+          {value: "clothes", text: "Textil"},
+          {value: "home", text: "Menaje"}
         ];
       } else if(value == "payment_type"){
         var new_options = [
-          {value: "cash", text: "Cash"},
-          {value: "credit_card", text: "Credit card"},
-          {value: "mobile_phone", text: "Mobile phone"},
-          {value: "financing", text: "Financing"}
+          {value: "cash", text: "Efectivo"},
+          {value: "credit_card", text: "Tarjeta de crédito"},
+          {value: "mobile_phone", text: "Pago móvil"},
+          {value: "financing", text: "Financiación"}
         ]
       } else if(value == "store"){
         var new_options = [
-          {value: "store1", text: "Store 1"},
-          {value: "store2", text: "Store 2"},
-          {value: "store3", text: "Store 3"},
-          {value: "store4", text: "Store 4"},
-          {value: "store5", text: "Store 5"}
+          {value: "store1", text: "Store_1"},
+          {value: "store2", text: "Store_2"},
+          {value: "store3", text: "Store_3"},
+          {value: "store4", text: "Store_4"},
+          {value: "store5", text: "Store_5"}
         ]
       } else if(value == "date"){
 
