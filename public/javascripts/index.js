@@ -15,6 +15,17 @@ $(document).ready(function () {
     {period: "8", value: 15}
   ];
 
+  var line_graphic_data = [
+    {"x":"1", "y":10},
+    {"x":"2", "y":15},
+    {"x":"3", "y":21},
+    {"x":"4", "y":11},
+    {"x":"5", "y":35},
+    {"x":"6", "y":45},
+    {"x":"7", "y":10},
+    {"x":"8", "y":85}
+  ];
+
 
   var addGraphicToInterface = function(graphic_title){
     var container_id = graphic_title.replace(' ', '_');
@@ -34,8 +45,10 @@ $(document).ready(function () {
     var graphic_height = document.getElementById(container_id).offsetHeight;
     var graphic_margin = {top: 50, right: 30, bottom: 60, left: 100};
 
-    createBarChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
-    loadBarChartGraphic(bar_chart_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    //createBarChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    //loadBarChartGraphic(bar_chart_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    createLineChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    loadLineChart(line_graphic_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
 
 
     // Scroll al elemento creado
