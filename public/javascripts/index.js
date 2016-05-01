@@ -26,6 +26,27 @@ $(document).ready(function () {
     {"x":"8", "y":85}
   ];
 
+  var treemap_graphic_data = [
+    {"level1": 2011, "level2":"Store_1", "key": "Alimentacion", "value": 7},
+    {"level1": 2011, "level2":"Store_1", "key": "Textil", "value": 6},
+    {"level1": 2011, "level2":"Store_2", "key": "Menaje", "value": 8},
+    {"level1": 2011, "level2":"Store_3", "key": "Alimentacion", "value": 7},
+    {"level1": 2011, "level2":"Store_3", "key": "Textil", "value": 7},
+    {"level1": 2012, "level2":"Store_1", "key": "Alimentacion", "value": 9},
+    {"level1": 2012, "level2":"Store_1", "key": "Textil", "value": 6},
+    {"level1": 2012, "level2":"Store_1", "key": "Menaje", "value": 10},
+    {"level1": 2012, "level2":"Store_1", "key": "Juguetería", "value": 8},
+    {"level1": 2012, "level2":"Store_4", "key": "Alimentacion", "value": 5},
+    {"level1": 2012, "level2":"Store_4", "key": "Textil", "value": 3},
+    {"level1": 2013, "level2":"Store_1", "key": "Alimentacion", "value": 6},
+    {"level1": 2013, "level2":"Store_2", "key": "Alimentacion", "value": 7},
+    {"level1": 2013, "level2":"Store_3", "key": "Textil", "value": 5},
+    {"level1": 2013, "level2":"Store_4", "key": "Alimentacion", "value": 10},
+    {"level1": 2013, "level2":"Store_4", "key": "Textil", "value": 6},
+    {"level1": 2013, "level2":"Store_4", "key": "Menaje", "value": 9},
+    {"level1": 2013, "level2":"Store_5", "key": "Juguetería", "value": 8},
+  ];
+
 
   var addGraphicToInterface = function(graphic_title){
     var container_id = graphic_title.replace(' ', '_');
@@ -47,8 +68,10 @@ $(document).ready(function () {
 
     //createBarChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
     //loadBarChartGraphic(bar_chart_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
-    createLineChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
-    loadLineChart(line_graphic_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    //createLineChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    //loadLineChart(line_graphic_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    //createTreemap(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    //loadTreemap(treemap_graphic_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic", false, 2);
 
 
     // Scroll al elemento creado
