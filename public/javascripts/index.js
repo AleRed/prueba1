@@ -3,8 +3,44 @@
  */
 
 $(document).ready(function () {
-  $('body').scrollspy({ target: '#myScrollspy' });
 
+  var addGraphicToInterface = function(graphic_title){
+    $("#graphics-titles-container ul").append(
+      "<li><a href='#" + graphic_title.replace(' ', '_') + "'>" + graphic_title + "</a></li>"
+    );
+
+    $("#graphics-container").append(
+      "<div id='" + graphic_title.replace(' ', '_') + "'>" +
+      "<h2>" + graphic_title + "</h2>" +
+      "<div class='graphic-container'></div>" +
+      "</div>" +
+      "<hr>"
+    );
+  };
+
+  /*********************************************************************************************************************
+   * ADD GRAPH
+   ********************************************************************************************************************/
+  $("#add-graphic-button").on("click", function(){
+    var new_section = 'Section X';
+    addGraphicToInterface(new_section);
+  });
+
+  /*********************************************************************************************************************
+   * FUNCIONALIDAD DE SCROLL
+   ********************************************************************************************************************/
+
+  var sections = ['Section A', 'Section B', 'Section C'];
+
+  sections.forEach(function(section){
+    addGraphicToInterface(section);
+  });
+
+  $('body').scrollspy({ target: '#graphics-titles-container' });
+
+  /*********************************************************************************************************************
+   * CONTROL DE LOS FILTROS
+   ********************************************************************************************************************/
   $("#filter-by-select").on("change", function(){
     var value = $(this).val();
 
