@@ -108,10 +108,10 @@ $(document).ready(function () {
    * CONTROL DE LOS FILTROS
    ********************************************************************************************************************/
 
-  /* GROUP BY */
-  $("#group-by-select").on("change", function(){
-    var value = $(this).val();
-
+  /**
+   *
+   * */
+  var changeFilterSelector = function(value){
     $('#filter-by-select')
       .find('option')
       .remove();
@@ -140,7 +140,13 @@ $(document).ready(function () {
         text : option.text
       }));
     });
+  }
 
+
+  /* GROUP BY */
+  $("#group-by-select").on("change", function(){
+    var value = $(this).val();
+    changeFilterSelector(value);
   });
 
   /* GRAPHIC TYPE */
@@ -157,24 +163,31 @@ $(document).ready(function () {
         {value: "department", text: "Department"},
         {value: "payment_type", text: "Payment type"},
         {value: "store", text: "Store"},
-        {value: "date_month", text: "Weekly"},
-        {value: "date_year", text: "Monthly"}
+        {value: "date_month", text: "Monthly"},
+        {value: "date_year", text: "Yearly"}
       ];
+      changeFilterSelector("department");
+
     } else if(value == "line_chart"){
       var new_options = [
-        {value: "date_month", text: "Weekly"},
-        {value: "date_year", text: "Monthly"}
+        {value: "date_month", text: "Monthly"},
+        {value: "date_year", text: "Yearly"}
       ];
+      changeFilterSelector("date_month");
+
     } else if(value == "pie_chart"){
       var new_options = [
         {value: "department", text: "Department"},
         {value: "payment_type", text: "Payment type"}
       ];
+      changeFilterSelector("department");
+
     } else if(value == "treemap"){
       var new_options = [
         {value: "department", text: "Department"},
         {value: "payment_type", text: "Payment type"}
       ];
+      changeFilterSelector("department");
     }
 
     $.each(new_options, function (i, option) {
