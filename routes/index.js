@@ -43,8 +43,9 @@ router.get('/', function(req, res, next) {
 router.get('/add_graphic', function(req, res, next) {
   var graphic_type = req.query.graphic_type;
   var group_category = req.query.group_by;
+  var user_id = req.query.user_id;
 
-  data_inserter.insertLoadedVisualizacion(group_category, graphic_type, null)
+  data_inserter.insertLoadedVisualizacion(group_category, graphic_type, user_id)
     .then(function(){
       if(graphic_type == "line_chart" || graphic_type == "bar_chart" || graphic_type == "pie_chart"){
         data_provider.getXYData(graphic_type, group_category)
@@ -65,8 +66,9 @@ router.get('/add_graphic_with_filter', function(req, res, next) {
   var group_category = req.query.group_by;
   var filter_type = req.query.filter_type;
   var filter_value = req.query.filter_value;
+  var user_id = req.query.user_id;
 
-  data_inserter.insertLoadedVisualizacionWithFilter(group_category, graphic_type, null, filter_type, filter_value)
+  data_inserter.insertLoadedVisualizacionWithFilter(group_category, graphic_type, user_id, filter_type, filter_value)
     .then(function(){
       console.log("HOLA");
       if(graphic_type == "line_chart" || graphic_type == "bar_chart" || graphic_type == "pie_chart"){

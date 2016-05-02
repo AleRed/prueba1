@@ -5,33 +5,8 @@
 $(document).ready(function () {
   console.log(user_id);
 
-  var treemap_graphic_data = [
-    {"level1": 2011, "level2":"Store_1", "key": "Alimentacion", "value": 7},
-    {"level1": 2011, "level2":"Store_1", "key": "Textil", "value": 6},
-    {"level1": 2011, "level2":"Store_2", "key": "Menaje", "value": 8},
-    {"level1": 2011, "level2":"Store_3", "key": "Alimentacion", "value": 7},
-    {"level1": 2011, "level2":"Store_3", "key": "Textil", "value": 7},
-    {"level1": 2012, "level2":"Store_1", "key": "Alimentacion", "value": 9},
-    {"level1": 2012, "level2":"Store_1", "key": "Textil", "value": 6},
-    {"level1": 2012, "level2":"Store_1", "key": "Menaje", "value": 10},
-    {"level1": 2012, "level2":"Store_1", "key": "Juguetería", "value": 8},
-    {"level1": 2012, "level2":"Store_4", "key": "Alimentacion", "value": 5},
-    {"level1": 2012, "level2":"Store_4", "key": "Textil", "value": 3},
-    {"level1": 2013, "level2":"Store_1", "key": "Alimentacion", "value": 6},
-    {"level1": 2013, "level2":"Store_2", "key": "Alimentacion", "value": 7},
-    {"level1": 2013, "level2":"Store_3", "key": "Textil", "value": 5},
-    {"level1": 2013, "level2":"Store_4", "key": "Alimentacion", "value": 10},
-    {"level1": 2013, "level2":"Store_4", "key": "Textil", "value": 6},
-    {"level1": 2013, "level2":"Store_4", "key": "Menaje", "value": 9},
-    {"level1": 2013, "level2":"Store_5", "key": "Juguetería", "value": 8},
-  ];
-
-
   var addGraphicToInterface = function(graphic_title, data, graphic_type){
     var container_id = graphic_title.split(' ').join('_');
-
-    //console.log(graphic_title);
-    //console.log(container_id);
 
     $("#graphics-titles-container ul").append(
       "<li id='" + container_id + "_li'><a href='#" + container_id + "'>" + graphic_title + "</a></li>"
@@ -83,14 +58,14 @@ $(document).ready(function () {
 
 
     if(filter_type == "none"){
-      $.get("add_graphic", {graphic_type: graphic_type, group_by: group_by}, function( data ) {
+      $.get("add_graphic", {graphic_type: graphic_type, group_by: group_by, user_id: user_id}, function( data ) {
         //console.log(data);
         var title = graphic_type_text + " by " + group_by_text;
         addGraphicToInterface(title, data, graphic_type);
       });
     } else {
       var filter_value = $("#filter-value-select").val();
-      $.get("add_graphic_with_filter", {graphic_type: graphic_type, group_by: group_by, filter_type: filter_type, filter_value: filter_value}, function( data ) {
+      $.get("add_graphic_with_filter", {graphic_type: graphic_type, group_by: group_by, filter_type: filter_type, filter_value: filter_value, user_id: user_id}, function( data ) {
         var title = graphic_type_text + " by " + group_by_text + " where " + filter_type + " is " + filter_value;
         addGraphicToInterface(title, data, graphic_type);
       });

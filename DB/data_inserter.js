@@ -22,7 +22,7 @@ data_inserter.insertLoadedVisualizacion = function(category, graphic_type, user_
           return new db.LoadedVisualization({
             date: new Date(),
             category_id: category_id,
-            user_id: null,
+            user_id: user_id,
             graphic_type_id: graphic_type_id
           })
             .save();
