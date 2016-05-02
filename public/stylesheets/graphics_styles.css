@@ -147,6 +147,11 @@
     shape-rendering: crispEdges;
 }
 
+.bar_chart_rect:hover{
+    fill: orange;
+    shape-rendering: crispEdges;
+}
+
 
 .tooltip {
     position: absolute;

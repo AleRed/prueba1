@@ -140,7 +140,7 @@ $(document).ready(function () {
         text : option.text
       }));
     });
-  }
+  };
 
 
   /* GROUP BY */
