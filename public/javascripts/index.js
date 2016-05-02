@@ -4,34 +4,6 @@
 
 $(document).ready(function () {
 
-  var bar_chart_data = [
-    {period: "1", value: 20},
-    {period: "2", value: 50},
-    {period: "3", value: 35},
-    {period: "4", value: 45},
-    {period: "5", value: 21},
-    {period: "6", value: 1},
-    {period: "7", value: 12},
-    {period: "8", value: 15}
-  ];
-
-  var line_graphic_data = [
-    {"x":"1", "y":10},
-    {"x":"2", "y":15},
-    {"x":"3", "y":21},
-    {"x":"4", "y":11},
-    {"x":"5", "y":35},
-    {"x":"6", "y":45},
-    {"x":"7", "y":10},
-    {"x":"8", "y":85}
-  ];
-
-  var pie_chart_data = [
-    {"key": "Pago movil", "value": 300},
-    {"key": "Financiacion", "value": 450},
-    {"key": "Efectivo", "value": 1200},
-    {"key": "Tarjeta de crédito", "value": 800}];
-
   var treemap_graphic_data = [
     {"level1": 2011, "level2":"Store_1", "key": "Alimentacion", "value": 7},
     {"level1": 2011, "level2":"Store_1", "key": "Textil", "value": 6},
@@ -54,8 +26,11 @@ $(document).ready(function () {
   ];
 
 
-  var addGraphicToInterface = function(graphic_title){
-    var container_id = graphic_title.replace(' ', '_');
+  var addGraphicToInterface = function(graphic_title, data, graphic_type){
+    var container_id = graphic_title.split(' ').join('_');
+
+    //console.log(graphic_title);
+    //console.log(container_id);
 
     $("#graphics-titles-container ul").append(
       "<li id='" + container_id + "_li'><a href='#" + container_id + "'>" + graphic_title + "</a></li>"
@@ -72,15 +47,19 @@ $(document).ready(function () {
     var graphic_height = document.getElementById(container_id).offsetHeight;
     var graphic_margin = {top: 50, right: 30, bottom: 60, left: 100};
 
-    //createBarChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
-    //loadBarChartGraphic(bar_chart_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
-    //createLineChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
-    //loadLineChart(line_graphic_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
-    //createTreemap(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
-    //loadTreemap(treemap_graphic_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic", false, 2);
-    createPieChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
-    loadPieChartGraphic(pie_chart_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic")
-
+    if(graphic_type == "line_chart"){
+      createLineChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+      loadLineChart(data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    } else if(graphic_type == "bar_chart"){
+      createBarChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+      loadBarChartGraphic(data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    } else if(graphic_type == "pie_chart"){
+      createPieChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+      loadPieChartGraphic(data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic")
+    } else if(graphic_type == "treemap"){
+      createTreemap(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+      loadTreemap(data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic", false, 2);
+    }
 
     // Scroll al elemento creado
     $('html, body').animate({
@@ -94,28 +73,78 @@ $(document).ready(function () {
    * ADD GRAPH BUTTON
    ********************************************************************************************************************/
   $("#add-graphic-button").on("click", function(){
-    var new_section = 'Section X';
-    addGraphicToInterface(new_section);
+    var graphic_type = $("#graphic-type-button option:selected").val();
+    var group_by = $("#group-by-select option:selected").val();
+    var graphic_type_text = $("#graphic-type-button option:selected").text();
+    var group_by_text = $("#group-by-select option:selected").text();
+
+    var title = graphic_type_text + " group by " + group_by_text;
+
+    $.get("add_graphic", {graphic_type: graphic_type, group_by: group_by}, function( data ) {
+      //console.log(data);
+      addGraphicToInterface(title, data, graphic_type);
+    });
+
+
   });
 
   /*********************************************************************************************************************
    * FUNCIONALIDAD DE SCROLL
    ********************************************************************************************************************/
 
-  //var sections = ['Section A', 'Section B', 'Section C'];
-  //
-  //sections.forEach(function(section){
-  //  addGraphicToInterface(section);
-  //});
-
   $('body').scrollspy({ target: '#graphics-titles-container' });
 
   /*********************************************************************************************************************
    * CONTROL DE LOS FILTROS
    ********************************************************************************************************************/
-  $("#filter-by-select").on("change", function(){
+
+  /* GRAPHIC TYPE */
+
+  $("#graphic-type-button").on("change", function() {
     var value = $(this).val();
 
+    $('#group-by-select')
+      .find('option')
+      .remove();
+
+    if(value == "bar_chart"){
+      var new_options = [
+        {value: "department", text: "Department"},
+        {value: "payment_type", text: "Payment type"},
+        {value: "store", text: "Store"},
+        {value: "date_month", text: "Weekly"},
+        {value: "date_year", text: "Monthly"}
+      ];
+    } else if(value == "line_chart"){
+      var new_options = [
+        {value: "date_month", text: "Weekly"},
+        {value: "date_year", text: "Monthly"}
+      ];
+    } else if(value == "pie_chart"){
+      var new_options = [
+        {value: "department", text: "Department"},
+        {value: "payment_type", text: "Payment type"}
+      ];
+    } else if(value == "treemap"){
+      var new_options = [
+        {value: "department", text: "Department"},
+        {value: "payment_type", text: "Payment type"}
+      ];
+    }
+
+    $.each(new_options, function (i, option) {
+      $('#group-by-select').append($('<option>', {
+        value: option.value,
+        text : option.text
+      }));
+    });
+
+  });
+
+  /* FILTER BY */
+
+  $("#filter-by-select").on("change", function(){
+    var value = $(this).val();
 
     $('#filter-value-select')
       .find('option')

@@ -33,7 +33,7 @@ function loadBarChartGraphic(data, graphic_width, graphic_height, graphic_margin
   var x = d3.scale.ordinal()
     .rangeRoundBands([0, width], .2)
     .domain(data.map(function (d) {
-      return d.period;
+      return d.x;
     }));
 
   var xAxis = d3.svg.axis()
@@ -44,7 +44,7 @@ function loadBarChartGraphic(data, graphic_width, graphic_height, graphic_margin
   var y = d3.scale.linear()
     .range([height, 0])
     .domain([0, d3.max(data, function (d) {
-      return d.value;
+      return d.y;
     })]);
 
   var yAxis = d3.svg.axis()
@@ -74,7 +74,12 @@ function loadBarChartGraphic(data, graphic_width, graphic_height, graphic_margin
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis_initial)
       .transition().duration(1000).delay(1000)
-      .call(xAxis);
+      .call(xAxis)
+      .selectAll("text")
+      .attr("transform", function(){
+        if(data.length > 20)
+          return "translate(-20, 15) rotate(-45)";
+      });
   }
 
   if (y1[0].length == 0) {
@@ -102,19 +107,19 @@ function loadBarChartGraphic(data, graphic_width, graphic_height, graphic_margin
 
   var bar = chart.selectAll(".column_g")
     .data(data, function (d) {
-      return d.period
+      return d.x
     });
 
   // UPDATE
   bar.select("rect").transition().delay(2000).duration(1000)
     .attr("height", function (d) {
-      return height - y(d.value);
+      return height - y(d.y);
     })
     .attr("y", function (d) {
-      return y(d.value);
+      return y(d.y);
     })
     .attr("x", function (d) {
-      return x(d.period);
+      return x(d.x);
     })
     .attr("width", x.rangeBand());
 
@@ -123,12 +128,12 @@ function loadBarChartGraphic(data, graphic_width, graphic_height, graphic_margin
 
   g.append("rect")
     .attr("id", function (d) {
-      return d.period + "_rect";
+      return d.x + "_rect";
     })
     .attr("class", "bar_chart_rect")
     .attr("style", "opacity: 0.7")
     .attr("x", function (d) {
-      return x(d.period);
+      return x(d.x);
     })
     .attr("y", height)
     .attr("width", x.rangeBand())
@@ -137,10 +142,10 @@ function loadBarChartGraphic(data, graphic_width, graphic_height, graphic_margin
     .delay(2000)
     .duration(1000)
     .attr("height", function (d) {
-      return height - y(d.value);
+      return height - y(d.y);
     })
     .attr("y", function (d) {
-      return y(d.value);
+      return y(d.y);
     });
 
   //g.on("mouseover", function(d){
@@ -151,15 +156,15 @@ function loadBarChartGraphic(data, graphic_width, graphic_height, graphic_margin
   //        "Period: " + d.period +
   //        "<br/>" +
   //        "Value: " + d.value)
-  //      .style("left", x(d.period) + graphic_margin.left + "px")
+  //      .style("left", x(d.x) + graphic_margin.left + "px")
   //      .style("top", d3.event.pageY - graphic_margin.top + "px");
   //  })
   //  .on("mousemove", function(d){
-  //    console.log(x(d.period));
-  //    console.log(x(d.period) + graphic_margin.left);
-  //    console.log(x(d.period) + graphic_margin.left + "px");
+  //    console.log(x(d.x));
+  //    console.log(x(d.x) + graphic_margin.left);
+  //    console.log(x(d.x) + graphic_margin.left + "px");
   //    tooltip_div
-  //      .style("left", x(d.period) + graphic_margin.left + "px")
+  //      .style("left", x(d.x) + graphic_margin.left + "px")
   //      .style("top", d3.event.pageY - graphic_margin.top + "px");
   //  })
   //  .on("mouseout", function(){

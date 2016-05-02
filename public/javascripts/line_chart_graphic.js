@@ -70,7 +70,11 @@ function loadLineChart(data, graphic_width, graphic_height, graphic_margin, grap
     .call(xAxis_initial)
     .transition().duration(1000)
     .call(xAxis)
-    .selectAll("text");
+    .selectAll("text")
+    .attr("transform", function(){
+      if(data.length > 20)
+        return "translate(-10, 5) rotate(-45)";
+    });
 
 
   chart.append("g")
