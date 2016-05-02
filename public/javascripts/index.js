@@ -26,6 +26,12 @@ $(document).ready(function () {
     {"x":"8", "y":85}
   ];
 
+  var pie_chart_data = [
+    {"key": "Pago movil", "value": 300},
+    {"key": "Financiacion", "value": 450},
+    {"key": "Efectivo", "value": 1200},
+    {"key": "Tarjeta de crédito", "value": 800}];
+
   var treemap_graphic_data = [
     {"level1": 2011, "level2":"Store_1", "key": "Alimentacion", "value": 7},
     {"level1": 2011, "level2":"Store_1", "key": "Textil", "value": 6},
@@ -72,6 +78,8 @@ $(document).ready(function () {
     //loadLineChart(line_graphic_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
     //createTreemap(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
     //loadTreemap(treemap_graphic_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic", false, 2);
+    createPieChart(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
+    loadPieChartGraphic(pie_chart_data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic")
 
 
     // Scroll al elemento creado
