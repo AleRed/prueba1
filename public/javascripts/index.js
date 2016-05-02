@@ -58,7 +58,7 @@ $(document).ready(function () {
       loadPieChartGraphic(data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic")
     } else if(graphic_type == "treemap"){
       createTreemap(graphic_width, graphic_height, graphic_margin, container_id + "_graphic");
-      loadTreemap(data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic", false, 2);
+      loadTreemap(data, graphic_width, graphic_height, graphic_margin, container_id + "_graphic", false, Object.keys(data[0]).length - 2);
     }
 
     // Scroll al elemento creado
@@ -78,12 +78,22 @@ $(document).ready(function () {
     var graphic_type_text = $("#graphic-type-button option:selected").text();
     var group_by_text = $("#group-by-select option:selected").text();
 
-    var title = graphic_type_text + " group by " + group_by_text;
+    var filter_type = $("#filter-by-select").val();
 
-    $.get("add_graphic", {graphic_type: graphic_type, group_by: group_by}, function( data ) {
-      //console.log(data);
-      addGraphicToInterface(title, data, graphic_type);
-    });
+
+    if(filter_type == "none"){
+      $.get("add_graphic", {graphic_type: graphic_type, group_by: group_by}, function( data ) {
+        //console.log(data);
+        var title = graphic_type_text + " by " + group_by_text;
+        addGraphicToInterface(title, data, graphic_type);
+      });
+    } else {
+      var filter_value = $("#filter-value-select").val();
+      $.get("add_graphic_with_filter", {graphic_type: graphic_type, group_by: group_by, filter_type: filter_type, filter_value: filter_value}, function( data ) {
+        var title = graphic_type_text + " by " + group_by_text + " where " + filter_type + " is " + filter_value;
+        addGraphicToInterface(title, data, graphic_type);
+      });
+    }
 
 
   });
@@ -97,6 +107,41 @@ $(document).ready(function () {
   /*********************************************************************************************************************
    * CONTROL DE LOS FILTROS
    ********************************************************************************************************************/
+
+  /* GROUP BY */
+  $("#group-by-select").on("change", function(){
+    var value = $(this).val();
+
+    $('#filter-by-select')
+      .find('option')
+      .remove();
+
+    if(value == "department"){
+      var new_options = [
+        {value: "none", text: "None"},
+        {value: "payment_type", text: "Payment Type"}
+      ];
+    } else if(value == "payment_type"){
+      var new_options = [
+        {value: "none", text: "None"},
+        {value: "department", text: "Department"}
+      ];
+    } else if(value == "store" || value == "date_year" || value == "date_month"){
+      var new_options = [
+        {value: "none", text: "None"},
+        {value: "department", text: "Department"},
+        {value: "payment_type", text: "Payment Type"}
+      ];
+    }
+
+    $.each(new_options, function (i, option) {
+      $('#filter-by-select').append($('<option>', {
+        value: option.value,
+        text : option.text
+      }));
+    });
+
+  });
 
   /* GRAPHIC TYPE */
 
@@ -158,16 +203,20 @@ $(document).ready(function () {
       $("#filter-value-select").fadeIn(100);
       if(value == "department"){
         var new_options = [
-          {value: "food", text: "Alimentación"},
-          {value: "clothes", text: "Textil"},
-          {value: "home", text: "Menaje"}
+          {value: "alimentacion", text: "Alimentación"},
+          {value: "textil", text: "Textil"},
+          {value: "menaje", text: "Menaje"},
+          {value: "jugueteria", text: "Juguetería"},
+          {value: "electrodomesticos", text: "Electrodomésticos"},
+          {value: "tecnologia", text: "Tecnología"},
+          {value: "cosmetica", text: "Cosmética"}
         ];
       } else if(value == "payment_type"){
         var new_options = [
-          {value: "cash", text: "Efectivo"},
-          {value: "credit_card", text: "Tarjeta de crédito"},
-          {value: "mobile_phone", text: "Pago móvil"},
-          {value: "financing", text: "Financiación"}
+          {value: "Efectivo", text: "Efectivo"},
+          {value: "Tarjeta de crédito", text: "Tarjeta de crédito"},
+          {value: "Pago movil", text: "Pago móvil"},
+          {value: "Financiacion", text: "Financiación"}
         ]
       } else if(value == "store"){
         var new_options = [

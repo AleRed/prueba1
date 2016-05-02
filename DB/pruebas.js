@@ -5,21 +5,34 @@
 var data_provider = require('./data_provider');
 var db = require('./db_models');
 
-data_provider.getTreemapData("store")
+
+var table1 = "departments";
+var table2 = "provinces";
+
+db.Sale.query(function(q) {
+  q.column([table1 + ".name as level1", table2 + ".name as key"]).sum('value as value')
+    .whereRaw('payment_types.name = "EFECTIVO"')
+    .groupBy(table1 + '.name')
+    .groupBy(table2 + '.name')
+    .innerJoin('departments', 'sales.department_id', 'departments.id')
+    .innerJoin('stores', 'sales.store_id', 'stores.id')
+    .innerJoin('provinces', 'stores.province_id', 'provinces.id')
+    .innerJoin('payment_types', 'sales.payment_type_id', 'payment_types.id')
+}).fetchAll()
   .then(function(data){
-    console.log(data);
+    console.log(data.toJSON());
   });
 
-//db.Sale.query(function(q) {
-//  q.column(["departments.name as department", "provinces.name as provinces", "payment_types.name as payment_type"]).sum('value as count')
-//    .groupBy('departments.name')
-//    .groupBy('provinces.name')
-//    .groupBy('payment_types.name')
+
+//return db.Sale.query(function(q){
+//
+//  q.column('departments.name as x').sum('value as y')
+//    .whereRaw('payment_types.name = "Efectivo"')
+//    .groupBy('department_id')
 //    .innerJoin('departments', 'sales.department_id', 'departments.id')
-//    .innerJoin('stores', 'sales.store_id', 'stores.id')
-//    .innerJoin('provinces', 'stores.province_id', 'provinces.id')
-//    .innerJoin('payment_types', 'sales.payment_type_id', 'payment_types.id')
+//    .innerJoin('payment_types', 'sales.payment_type_id', 'payment_types.id');
+//
 //}).fetchAll()
-//  .then(function(data){
-//    console.log(data.toJSON());
+//  .then(function(d){
+//    console.log(d.toJSON());
 //  });

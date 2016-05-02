@@ -342,11 +342,13 @@ function defineColorParent(d){
   if(!d.values)
   {
     if(parseFloat(d.value) >= 4.5)
-      return "#7fc291";
+      return "steelblue";
+      //return "#7fc291";
     else if(parseFloat(d.value) >= 4)
       return "steelblue";
     else
-      return "#FFF68F";
+      return "steelblue";
+      //return "#FFF68F";
   }
   else
     return "none"

@@ -7,6 +7,13 @@ var Promise = require('bluebird');
 
 var data_provider = {};
 
+
+
+/**
+ *
+ *
+ *
+ * */
 data_provider.getXYData = function(graphic_type, group_by){
 
   if(graphic_type == "line_chart" || graphic_type == "bar_chart"){
@@ -81,25 +88,68 @@ data_provider.getXYData = function(graphic_type, group_by){
         });
       });
   }
+};
+
+/**
+ *
+ *
+ *
+ * */
+data_provider.getTreemapDataWithFilter = function(group_by, filter_type, filter_value){
+  if (group_by == "department"){
+    var table1 = "departments";
+    var table2 = "provinces";
+    //var table3 = "payment_types";
+
+  //} else if (group_by == "store"){
+  //  var table1 = "provinces";
+  //  var table2 = "payment_types";
+  //  var table3 = "departments";
+
+  } else if (group_by == "payment_type"){
+    var table1 = "payment_types";
+    //var table2 = "departments";
+    var table2 = "provinces";
+  }
+
+  var filter_table_name = filter_type + "s";
+
+  return db.Sale.query(function(q) {
+    q.column([table1 + ".name as level1", table2 + ".name as key"]).sum('value as value')
+      .whereRaw(filter_table_name + '.name = "' + filter_value + '"')
+      .groupBy(table1 + '.name')
+      .groupBy(table2 + '.name')
+      .innerJoin('departments', 'sales.department_id', 'departments.id')
+      .innerJoin('stores', 'sales.store_id', 'stores.id')
+      .innerJoin('provinces', 'stores.province_id', 'provinces.id')
+      .innerJoin('payment_types', 'sales.payment_type_id', 'payment_types.id')
+  }).fetchAll()
+    .then(function(data){
+      return new Promise(function(resolve){
+        return resolve(data.toJSON());
+      })
+    });
 
 };
 
 
+
+
+/**
+ *
+ *
+ *
+ * */
 data_provider.getTreemapData = function(group_by) {
-  // || group_by == "store" || group_by == "payment_type"){
   if (group_by == "department"){
     var table1 = "departments";
     var id1 = "department_id";
-    //var table2 = "stores";
-    //var id2 = "store_id";
     var table2 = "provinces";
     var id2 = "province_id";
     var table3 = "payment_types";
     var id3 = "payment_type_id";
 
   } else if (group_by == "store"){
-    //var table1 = "stores";
-    //var id1 = "store_id";
     var table1 = "provinces";
     var id1 = "province_id";
     var table2 = "payment_types";
@@ -112,8 +162,6 @@ data_provider.getTreemapData = function(group_by) {
     var id1 = "payment_type_id";
     var table2 = "departments";
     var id2 = "department_id";
-    //var table3 = "stores";
-    //var id3 = "store_id";
     var table3 = "provinces";
     var id3 = "province_id";
   }
@@ -130,10 +178,49 @@ data_provider.getTreemapData = function(group_by) {
   }).fetchAll()
     .then(function(data){
       return new Promise(function(resolve){
-        console.log(data.toJSON());
+        //console.log(data.toJSON());
         return resolve(data.toJSON());
       })
     });
 };
+
+
+/**
+ *
+ *
+ *
+ * */
+data_provider.getXYDataWithFilter = function(graphic_type, group_by, filter_type, filter_value){
+  if(graphic_type == "line_chart" || graphic_type == "bar_chart"){
+    var x_name = "x";
+    var y_name = "y";
+  } else if(graphic_type == "pie_chart") {
+    var x_name = "key";
+    var y_name = "value";
+  }
+
+  if(group_by == "department" || group_by == "payment_type"){
+    var filter_table_name = filter_type + "s";
+    var table_name = group_by + "s";
+    var id_name = group_by + "_id";
+    return db.Sale.query(function(q){
+
+      q.column(table_name + '.name as ' + x_name).sum('value as ' + y_name)
+        .whereRaw(filter_table_name + '.name = "' + filter_value + '"')
+        .groupBy(id_name)
+        .innerJoin('departments', 'sales.department_id', 'departments.id')
+        .innerJoin('payment_types', 'sales.payment_type_id', 'payment_types.id');
+
+    }).fetchAll()
+      .then(function(data){
+        return new Promise(function(resolve){
+          return resolve(data.toJSON());
+        })
+      });
+  }
+
+};
+
+
 
 module.exports = data_provider;

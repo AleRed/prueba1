@@ -23,8 +23,25 @@ router.get('/add_graphic', function(req, res, next) {
         res.send(data);
       })
   }
+});
 
-  //res.send([{name: "hola", value: 2},{name: "adios", value: 5}]);
+router.get('/add_graphic_with_filter', function(req, res, next) {
+  var graphic_type = req.query.graphic_type;
+  var group_category = req.query.group_by;
+  var filter_type = req.query.filter_type;
+  var filter_value = req.query.filter_value;
+
+  if(graphic_type == "line_chart" || graphic_type == "bar_chart" || graphic_type == "pie_chart"){
+    data_provider.getXYDataWithFilter(graphic_type, group_category, filter_type, filter_value)
+      .then(function(data){
+        res.send(data);
+      });
+  } else if(graphic_type == "treemap"){
+    data_provider.getTreemapDataWithFilter(group_category, filter_type, filter_value)
+      .then(function(data){
+        res.send(data);
+      })
+  }
 });
 
 module.exports = router;
