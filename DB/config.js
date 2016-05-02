@@ -10,8 +10,7 @@ var knex = require('knex')({
     password : 'dev3lop3R',
     database : 'test_db',
     charset  : 'utf8'
-  },
-  debug: true
+  }
 });
 
 module.exports = knex;
