@@ -229,12 +229,6 @@ data_provider.getTreemapDataWithFilter = function(group_by, filter_type, filter_
   if (group_by == "department"){
     var table1 = "departments";
     var table2 = "provinces";
-    //var table3 = "payment_types";
-
-    //} else if (group_by == "store"){
-    //  var table1 = "provinces";
-    //  var table2 = "payment_types";
-    //  var table3 = "departments";
 
   } else if (group_by == "payment_type"){
     var table1 = "payment_types";
@@ -259,7 +253,15 @@ data_provider.getTreemapDataWithFilter = function(group_by, filter_type, filter_
         return resolve(data.toJSON());
       })
     });
+};
 
+
+/**
+ *
+ *
+ * */
+data_provider.getUserID = function(name, password){
+  return db.User.where({name: name, password: password}).fetch();
 };
 
 

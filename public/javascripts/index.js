@@ -3,6 +3,7 @@
  */
 
 $(document).ready(function () {
+  console.log(user_id);
 
   var treemap_graphic_data = [
     {"level1": 2011, "level2":"Store_1", "key": "Alimentacion", "value": 7},

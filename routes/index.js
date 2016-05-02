@@ -3,13 +3,44 @@ var router = express.Router();
 var data_provider = require('../DB/data_provider');
 var data_inserter = require('../DB/data_inserter');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+/**
+ * LOGIN
+ *
+ * */
+router.get('/login', function(req, res, next){
+  res.render('login');
 });
 
+router.post('/login', function(req, res, next){
+  data_provider.getUserID(req.body.name, req.body.password)
+    .then(function(user){
+      if(user != null){
+        res.redirect('/?user_id=' + user.toJSON().id);
+      } else {
+        res.redirect('/login')
+      }
+    })
+});
+
+
+
+/**
+ * INDEX
+ * */
+router.get('/', function(req, res, next) {
+  if(req.query.user_id == null){
+    res.redirect('/login');
+  } else {
+    res.render('index', { title: 'Express', user_id: req.query.user_id });
+  }
+});
+
+
+
+/**
+ * ADD GRAPHIC
+ * */
 router.get('/add_graphic', function(req, res, next) {
-  //console.log(req.query.name);
   var graphic_type = req.query.graphic_type;
   var group_category = req.query.group_by;
 
