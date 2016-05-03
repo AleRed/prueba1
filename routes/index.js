@@ -31,7 +31,10 @@ router.get('/', function(req, res, next) {
   if(req.query.user_id == null){
     res.redirect('/login');
   } else {
-    res.render('index', { title: 'Express', user_id: req.query.user_id });
+    data_provider.getRecommendedGraphicsDataForUser(req.query.user_id)
+      .then(function(data){
+        res.render('index', { title: 'Express', user_id: req.query.user_id, graphics_data: data});
+      })
   }
 });
 

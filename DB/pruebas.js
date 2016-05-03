@@ -6,13 +6,28 @@ var data_provider = require('./data_provider');
 var data_inserter = require('./data_inserter');
 var db = require('./db_models');
 
-var category = "department";
-var graphic_type = "line_chart";
 
-data_inserter.insertLoadedVisualizacionWithFilter(category, graphic_type, null, "payment_type", "Efectivo")
-  .then(function(data){
-    console.log(data.toJSON());
-  });
+data_provider.getRecommendedGraphicsDataForUser(1);
+
+//db.LoadedVisualization.query(function(q) {
+//  q.column('categories.name').count('* as suma')
+//    .whereRaw('loaded_visualizations.user_id = 1')
+//    .innerJoin('categories', 'loaded_visualizations.category_id', 'categories.id')
+//    .groupBy('loaded_visualizations.category_id')
+//    .orderByRaw('suma desc')
+//    .limit(3)
+//}).fetchAll()
+//  .then(function(data){
+//    console.log(data.toJSON());
+//  })
+
+//var category = "department";
+//var graphic_type = "line_chart";
+//
+//data_inserter.insertLoadedVisualizacionWithFilter(category, graphic_type, null, "payment_type", "Efectivo")
+//  .then(function(data){
+//    console.log(data.toJSON());
+//  });
 
 //db.Category.where({name: category}).fetch()
 //  .then(function(cat){

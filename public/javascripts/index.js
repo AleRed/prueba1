@@ -4,6 +4,8 @@
 
 $(document).ready(function () {
   console.log(user_id);
+  console.log(graphics_data);
+
 
   var addGraphicToInterface = function(graphic_title, data, graphic_type){
     var container_id = graphic_title.split(' ').join('_');
@@ -41,9 +43,17 @@ $(document).ready(function () {
     $('html, body').animate({
       scrollTop: $("#" + container_id).offset().top
     }, 500);
-
-
   };
+
+  setTimeout(function(){
+    graphics_data.forEach(function(graphic){
+      var title = graphic.graphic_type + " by " + graphic.category;
+      var data = graphic.data;
+      addGraphicToInterface(title, data, graphic.graphic_type);
+    });
+  }, 1000);
+
+
 
   /*********************************************************************************************************************
    * ADD GRAPH BUTTON
@@ -61,13 +71,13 @@ $(document).ready(function () {
       $.get("add_graphic", {graphic_type: graphic_type, group_by: group_by, user_id: user_id}, function( data ) {
         //console.log(data);
         var title = graphic_type_text + " by " + group_by_text;
-        addGraphicToInterface(title, data, graphic_type);
+        addGraphicToInterface(title, data, graphic_type, "normal_graphic");
       });
     } else {
       var filter_value = $("#filter-value-select").val();
       $.get("add_graphic_with_filter", {graphic_type: graphic_type, group_by: group_by, filter_type: filter_type, filter_value: filter_value, user_id: user_id}, function( data ) {
         var title = graphic_type_text + " by " + group_by_text + " where " + filter_type + " is " + filter_value;
-        addGraphicToInterface(title, data, graphic_type);
+        addGraphicToInterface(title, data, graphic_type, "normal_graphic");
       });
     }
 

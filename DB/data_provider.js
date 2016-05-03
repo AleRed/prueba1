@@ -59,7 +59,7 @@ data_provider.getXYData = function(graphic_type, group_by){
             new_data.push(new_element);
           });
 
-          console.log(new_data);
+          //console.log(new_data);
           return resolve(new_data);
         });
       });
@@ -264,6 +264,135 @@ data_provider.getUserID = function(name, password){
   return db.User.where({name: name, password: password}).fetch();
 };
 
+data_provider.getFavouritesCategoriesForUser = function(user_id){
+  return db.LoadedVisualization.query(function(q) {
+    q.column('categories.name').count('* as suma')
+      .whereRaw('loaded_visualizations.user_id = ' + user_id)
+      .innerJoin('categories', 'loaded_visualizations.category_id', 'categories.id')
+      .groupBy('loaded_visualizations.category_id')
+      .orderByRaw('suma desc')
+      .limit(2)
+  }).fetchAll()
+};
+
+data_provider.getFavouritesCategoriesWithoutUser = function(user_id){
+  return db.LoadedVisualization.query(function(q) {
+    q.column('categories.name').count('* as suma')
+      .whereRaw('loaded_visualizations.user_id <> ' + user_id)
+      .innerJoin('categories', 'loaded_visualizations.category_id', 'categories.id')
+      .groupBy('loaded_visualizations.category_id')
+      .orderByRaw('suma desc')
+      .limit(2)
+  }).fetchAll()
+};
+
+data_provider.getFavouriteGraphicTypeForCategoryAndUser = function(user_id, category){
+  return db.LoadedVisualization.query(function(q){
+    q.column('categories.name as category', 'graphic_types.name as graphic_type').count('* as suma')
+      .whereRaw('loaded_visualizations.user_id = ' + user_id + ' and categories.name = "' + category + '"')
+      .innerJoin('categories', 'loaded_visualizations.category_id', 'categories.id')
+      .innerJoin('graphic_types', 'loaded_visualizations.graphic_type_id', 'graphic_types.id')
+      .groupBy('loaded_visualizations.graphic_type_id')
+      .orderByRaw('suma desc')
+      .limit(1)
+  }).fetch();
+};
+
+data_provider.getFavouriteGraphicTypeForCategoryWithoutUser = function(user_id, category){
+  return db.LoadedVisualization.query(function(q){
+    q.column('categories.name as category', 'graphic_types.name as graphic_type').count('* as suma')
+      .whereRaw('loaded_visualizations.user_id <> ' + user_id + ' and categories.name = "' + category + '"')
+      .innerJoin('categories', 'loaded_visualizations.category_id', 'categories.id')
+      .innerJoin('graphic_types', 'loaded_visualizations.graphic_type_id', 'graphic_types.id')
+      .groupBy('loaded_visualizations.graphic_type_id')
+      .orderByRaw('suma desc')
+      .limit(1)
+  }).fetch();
+};
+
+
+/**
+ *
+ * */
+data_provider.getRecommendedGraphicsDataForUser = function(user_id){
+  return Promise.all([
+    this.getFavouritesCategoriesForUser(user_id)
+      .then(function(data){
+        var selected_categories = [];
+        var favourites_categories = data.toJSON();
+
+        favourites_categories.forEach(function(favourite_category){
+          selected_categories.push(favourite_category.name);
+        });
+
+        return Promise.mapSeries(selected_categories, function(category){
+            return data_provider.getFavouriteGraphicTypeForCategoryAndUser(user_id, category);
+          })
+          .then(function(graphics){
+            return Promise.mapSeries(graphics, function(graphic){
+                if(graphic.toJSON().graphic_type == "treemap"){
+                  return data_provider.getTreemapData(graphic.toJSON().category)
+                } else {
+                  return data_provider.getXYData(graphic.toJSON().graphic_type, graphic.toJSON().category);
+                }
+              })
+              .then(function(graphics_data){
+                return new Promise(function(resolve){
+                  var results = [];
+                  graphics.forEach(function(graph, i){
+                    results.push({graphic_type: graph.toJSON().graphic_type, category: graph.toJSON().category, data: graphics_data[i]});
+                  });
+                  resolve(results);
+                })
+              })
+          })
+      }),
+    this.getFavouritesCategoriesWithoutUser(user_id)
+      .then(function(data){
+        var selected_categories = [];
+        var favourites_categories = data.toJSON();
+
+        favourites_categories.forEach(function(favourite_category){
+          selected_categories.push(favourite_category.name);
+        });
+
+        return Promise.mapSeries(selected_categories, function(category){
+            return data_provider.getFavouriteGraphicTypeForCategoryWithoutUser(user_id, category);
+          })
+          .then(function(graphics){
+            return Promise.mapSeries(graphics, function(graphic){
+                if(graphic.toJSON().graphic_type == "treemap"){
+                  return data_provider.getTreemapData(graphic.toJSON().category)
+                } else {
+                  return data_provider.getXYData(graphic.toJSON().graphic_type, graphic.toJSON().category);
+                }
+              })
+              .then(function(graphics_data){
+                return new Promise(function(resolve){
+                  var results = [];
+                  graphics.forEach(function(graph, i){
+                    results.push({graphic_type: graph.toJSON().graphic_type, category: graph.toJSON().category, data: graphics_data[i]});
+                  });
+                  resolve(results);
+                })
+              })
+          })
+      })
+  ])
+    .then(function(data){
+      return new Promise(function(resolve){
+        var final_result = [];
+        data[0].forEach(function(d){
+          final_result.push(d)
+        });
+        data[1].forEach(function(d){
+          final_result.push(d)
+        });
+        resolve(final_result);
+      })
+    })
+
+}
 
 
 module.exports = data_provider;
